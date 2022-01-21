@@ -1,0 +1,140 @@
+.searchInput {
+    background-color: rgba(255, 255, 202, 0.644);
+    border: 2px rgba(255, 255, 0, 0.575) solid;
+    font-weight: 700;
+    color: #7a7a7a;
+
+    &:focus-visible {
+        outline: none;
+        background-color: rgba(255, 255, 133, 0.753);
+        border: 2px rgb(255, 255, 125) solid;
+    }
+}
+
+
+.selectContainer {
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+    position: relative;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    & > div:first-child {
+        background-color: rgba(255, 255, 202, 0.644);
+        border: 2px rgba(255, 255, 0, 0.575) solid;
+        width: 10rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 .75rem 0 1rem;
+        font-weight: 700;
+        color: #424242;
+    }
+
+    & > div:last-child {
+        display: none;
+
+        & > div {
+            padding-left: .5rem;
+            transition: .5s;
+
+            &:hover {
+                background-color: rgba(255, 255, 172, 0.753);
+                color: black;
+                transform: scale(1.1);
+                transition: .5s;
+                
+            }
+        }
+    }
+
+
+
+
+    .closeOpts:first-child {
+        animation: selectIdle .5s forwards;
+    }
+
+    .openOpts:first-child {
+        animation: selectTriggered .5s forwards;
+    }
+
+    .openOpts:last-child, .closeOpts:last-child {
+        display: block;
+        background-color: rgba(255, 255, 202, 0.644);
+        border: 2px rgba(255, 255, 0, 0.575) solid;
+        width: 10rem;
+        font-weight: 700;
+        position: absolute;
+        top: 2rem;
+        transform-origin: top;
+    }
+    .openOpts:last-child {
+        animation: openOpts .5s forwards;
+    }
+    .closeOpts:last-child {
+        color: #7a7a7a;
+        animation: closeOpts .5s forwards;
+        & > div {
+            pointer-events: none;
+        }
+    }
+    .dInitOpt {
+        display: none!important;
+    }
+}
+
+@keyframes selectTriggered {
+    0% {
+        background-color: rgba(255, 255, 202, 0.644);
+        border: 2px rgba(255, 255, 0, 0.575) solid;
+        color: #424242;
+    }
+    100% {
+        background-color: rgba(255, 255, 133, 0.753);
+        border: 2px rgb(255, 255, 125) solid;
+        color: black;
+    }
+}
+
+@keyframes selectIdle {
+    0% {
+        background-color: rgba(255, 255, 133, 0.753);
+        border: 2px rgb(255, 255, 125) solid;
+        color: black;
+    }
+    100% {
+        background-color: rgba(255, 255, 202, 0.644);
+        border: 2px rgba(255, 255, 0, 0.575) solid;
+        color: #424242;
+    }
+}
+
+@keyframes openOpts {
+    0% {
+        color: transparent;
+        transform: scaleY(0);
+    }
+    30% {
+        color: transparent;
+    }
+    100% {
+        color: #7a7a7a;
+        transform: scaleY(1);
+    }
+};
+
+@keyframes closeOpts {
+    0% {
+        transform: scaleY(1);
+    }
+    100% {
+        transform: scaleY(0);
+        color: transparent;
+    }
+}
