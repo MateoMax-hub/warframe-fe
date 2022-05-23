@@ -11,3 +11,41 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.parts-tabContainer > div:first-child > div:first-child::before {
+  border-bottom: 2px #aeae0000 solid;
+}
+.parts-tabContainer > div:first-child > div:first-child {
+  margin: 0;
+}
+.parts-tabContainer > div:first-child > div:first-child > div:first-child > div {
+  width: 31%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.parts-tabContainer > div:first-child > div:first-child > div:first-child > div > div.ant-tabs-tab {
+  background: unset;
+  background-color: #b8b86d94;
+  border: 2px #aeae00 solid;
+  border-top-width: 0;
+  margin: 0;
+  width: 7rem;
+}
+.parts-tabContainer > div:first-child > div:first-child > div:first-child > div > div.ant-tabs-tab > div {
+  text-align: center;
+  width: 100%;
+  color: #535353;
+  font-weight: 600;
+}
+.parts-tabContainer > div:first-child > div:first-child > div:first-child > div > div.ant-tabs-tab-active {
+  background: unset;
+  background-color: #b8b86d94;
+  border-bottom-color: transparent;
+}
+.parts-tabContainer > div:first-child > div:first-child > div:first-child > div > div.ant-tabs-tab-active > div {
+  color: #000000;
+  font-weight: 700;
+}
+
+

@@ -7,7 +7,7 @@ import {
 import Header from "./components/header/Header";
 import Inventory from "./routes/Inventory";
 import Items from "./routes/Items";
-import Parts from "./routes/Parts/Parts";
+import Parts from "./routes/Parts";
 import 'antd/dist/antd.css'
 
 function App() {
