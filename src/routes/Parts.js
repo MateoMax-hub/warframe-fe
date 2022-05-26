@@ -8,29 +8,7 @@ import PartsTypesTable from "../components/Parts/PartsTypesTable";
 
 const Parts = () => {
   const { partsContainer, tabContentSpliter } = style;
-  const [filter, setFilter] = useState({});
-  const [searchFilter, setSearchFilter] = useState({});
   const [tabKeySelected, setTabKeySelected] = useState(1);
-
-  useEffect(() => {
-    console.log(filter);
-    console.log(searchFilter);
-  }, [filter, searchFilter]);
-
-  const options = [
-    {
-      label: "uno",
-      value: "1",
-    },
-    {
-      label: "dos",
-      value: "2",
-    },
-    {
-      label: "tres",
-      value: "3",
-    },
-  ];
 
   const { TabPane } = Tabs;
 
@@ -45,14 +23,6 @@ const Parts = () => {
         <div></div> {/* blur background */}
       </div>
       <div>
-        {/* <Search placeHolder="buscar" width="10rem" setState={setSearchFilter} statePropName="mySearch"/> */}
-        {/* <Select 
-          options={options}
-          placeHolder="Numbers"
-          width="15rem"
-          setState={setFilter}
-          statePropName="myFilter"
-        /> */}
         <div>
           <div className="parts-tabContainer">
             <Tabs onChange={onChange} type="card" centered>

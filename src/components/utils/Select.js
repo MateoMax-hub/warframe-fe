@@ -3,10 +3,10 @@ import style from "./utils.module.scss";
 import { CaretDownOutlined } from "@ant-design/icons";
 
 const Select = (props) => {
-  const { options, placeHolder, width, setState, statePropName } = props;
+  const { options, placeHolder, width, setState, statePropName, state } = props;
   const { selectContainer, openOpts, closeOpts } = style;
   const [selected, setSelected] = useState(placeHolder || "");
-  const [open, setOpen] = useState("init");
+  const [open, setOpen] = useState('init');
 
   const setfirstClose = () => {
     if (open === "init") {
@@ -29,7 +29,11 @@ const Select = (props) => {
   const handleClick = (option) => {
     setOpen(false);
     setSelected(option.label);
-    setState({ [statePropName]: option.value });
+    if (!option.value) {
+      setState({});
+      return
+    }
+    setState({ [statePropName]: option.value, label: option.label });
   };
 
   return (
@@ -39,10 +43,11 @@ const Select = (props) => {
         onClick={handleTriggered}
         className={setfirstClose()}
       >
-        {selected}
+        {state.label || placeHolder}
         <CaretDownOutlined />
       </div>
       <div style={width ? { width: width} : {}} className={setfirstClose()}>
+        <div onClick={() => handleClick({label: placeHolder || '', value: false})}>{placeHolder || ''}</div>
         {options &&
           options.map((opt) => (
             <div onClick={() => handleClick(opt)}>{opt.label}</div>
