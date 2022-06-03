@@ -75,6 +75,11 @@ code {
   font-weight: 500;
 }
 
+
+.modalTableContainer .ant-table-row{
+  background: #feffa0;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 10px;

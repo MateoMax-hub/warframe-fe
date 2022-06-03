@@ -1,23 +1,24 @@
 import React, { useEffect, useState, useRef } from 'react';
+import Search from "../utils/Search";
+import Select from "../utils/Select";
 import style from './parts.module.scss';
+import { UndoOutlined } from '@ant-design/icons';
 import { useParts } from '../../hooks/useParts';
 import { Table } from 'antd';
-import Search from '../utils/Search';
-import Select from '../utils/Select';
-import { UndoOutlined } from '@ant-design/icons';
 
-const PartsTable = () => {
+const PartsInvTable = () => {
   const { partsTableContainer } = style;
+  const searchRef = useRef(null);
+  const { partsInvData } = useParts();
   const [searchFilter, setSearchFilter] = useState({});
   const [filterType, setFilterType] = useState({});
   const [parts, setParts] = useState([]);
-  const { partsData } = useParts();
-  const searchRef = useRef(null);
+
 
   useEffect(() => {
     if (searchFilter.mySearch && filterType.myFilter) {
       const regexFilter = new RegExp(searchFilter.mySearch, 'i');
-      const partsFiltered = partsData.map((part) => {
+      const partsFiltered = partsInvData.map((part) => {
         const partFiltered = part[filterType.myFilter]?.search(regexFilter);
         return partFiltered === -1 ? null : part;
       });
@@ -26,23 +27,16 @@ const PartsTable = () => {
   }, [searchFilter, filterType]);
 
   useEffect(() => {
-    if (partsData.length !== 0) setParts(partsData);
-  }, [partsData]);
+    if (partsInvData.length !== 0) setParts(partsInvData);
+    console.log(partsInvData);
+  }, [partsInvData]);
 
-  const columns = [
-    {
-      title: 'Type',
-      dataIndex: 'partType',
-    },
-    {
-      title: 'Name',
-      dataIndex: 'name'
-    },
-    {
-      title: 'Ducats',
-      dataIndex: 'ducats'
-    }
-  ];
+  const resetFilters = () => {
+    setFilterType({});
+    setSearchFilter({});
+    setParts(partsInvData);
+    searchRef.current.value = ''
+  };
 
   const options = [
     {
@@ -57,20 +51,42 @@ const PartsTable = () => {
       label: "Type",
       value: "partType",
     },
+    {
+      label: "Quantity",
+      value: "quantity"
+    }
   ];
 
-  const resetFilters = () => {
-    setFilterType({});
-    setSearchFilter({});
-    setParts(partsData);
-    searchRef.current.value = ''
-  };
+  const columns = [
+    {
+      title: 'Type',
+      dataIndex: 'partType',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name'
+    },
+    {
+      title: 'Ducats',
+      dataIndex: 'ducats'
+    },
+    {
+      title: 'Quantity',
+      dataIndex: 'quantity'
+    },
+  ];
 
   return (
     <div className={partsTableContainer}>
       <div>
-        <Search searchRef={searchRef} placeHolder="buscar" width="10rem" setState={setSearchFilter} statePropName="mySearch"/>
-        <Select 
+        <Search
+          searchRef={searchRef}
+          placeHolder="buscar"
+          width="10rem"
+          setState={setSearchFilter}
+          statePropName="mySearch"
+        />
+        <Select
           options={options}
           placeHolder="Filter"
           width="6.5rem"
@@ -84,16 +100,15 @@ const PartsTable = () => {
       </div>
 
       <Table
-        dataSource={(!parts || parts?.length === 0) ? [{},{},{},{}] : parts}
+        dataSource={!parts || parts?.length === 0 ? [{}, {}, {}, {}] : parts}
         loading={!parts || parts?.length === 0}
         columns={columns}
         pagination={false}
-        scroll={{ y: 'calc(100vh - 6rem - 170px)' }}
-        className='parts_tableContainer'
-      >
-      </Table>
+        scroll={{ y: "calc(100vh - 6rem - 170px)" }}
+        className="parts_tableContainer"
+      ></Table>
     </div>
   );
 };
 
-export default PartsTable;
+export default PartsInvTable;

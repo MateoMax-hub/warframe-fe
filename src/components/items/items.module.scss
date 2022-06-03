@@ -1,0 +1,20 @@
+@import './../../commonStyles.scss';
+
+.itemsTableContainer {
+    @extend .tableContainer;
+}
+
+.viewPartsButton {
+    background: #ffff8f78!important;
+    border: 2px #aeae00 solid!important;
+    
+    span {
+        color: #1c1c1c;
+    }
+    &:hover {
+        transform: scale(1.1);
+    }
+    &:active {
+        transform: scale(0.9);
+    }
+}

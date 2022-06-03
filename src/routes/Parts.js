@@ -1,7 +1,5 @@
 import { Tabs } from "antd";
-import React, { useState, useEffect } from "react";
-import Search from "../components/utils/Search";
-import Select from "../components/utils/Select";
+import React, { useState } from "react";
 import style from "./routes.module.scss";
 import PartsTable from "../components/Parts/PartsTable";
 import PartsTypesTable from "../components/Parts/PartsTypesTable";
