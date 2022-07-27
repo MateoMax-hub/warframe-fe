@@ -2,18 +2,32 @@ import React, { useEffect, useState, useRef } from "react";
 import Search from "../utils/Search";
 import Select from "../utils/Select";
 import style from "./items.module.scss";
-import { UndoOutlined, EyeOutlined } from "@ant-design/icons";
+import { UndoOutlined, EyeOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Button, Modal, Table } from "antd";
 import { useItems } from "../../hooks/useItems";
+import AddItemModal from "../modals/AddItemModal";
+import DeleteModal from "../utils/DeleteModal";
 
 const ItemsTable = () => {
-  const { itemsTableContainer, viewPartsButton } = style;
+  const { itemsTableContainerWithFilter, viewPartsButton } = style;
   const searchRef = useRef(null);
-  const { itemsData } = useItems();
+  const { getItems } = useItems();
+  const [itemsData, setItemsData] = useState([]);
   const [searchFilter, setSearchFilter] = useState({});
   const [filterType, setFilterType] = useState({});
   const [items, setItems] = useState([]);
   const [partsModal, setPartsModal] = useState({status: false, parts: []});
+  const [addItemModalShow, setAddItemModalShow] = useState(false);
+  const [deleteModalData, setDeleteModalData] = useState({});
+  const [deleteModalShow, setDeleteModalShow] = useState(false);
+
+  useEffect(() => {
+    handleGetItems();
+  }, []);
+  
+  const handleGetItems = async () => {
+    setItemsData(await getItems());
+  }; 
 
   useEffect(() => {
     if (searchFilter.mySearch && filterType.myFilter) {
@@ -41,6 +55,16 @@ const ItemsTable = () => {
     setPartsModal({status: !partsModal.status, parts: partsModal.status ? [] : record.parts})
   };
 
+  const handleOpenDeleteModal = (record) => {
+    setDeleteModalShow(true);
+    setDeleteModalData({
+      title: 'Are you sure you want to delete this item?', 
+      reqParam: record._id, 
+      endPoint: 'items'
+    });
+  };
+
+
   const options = [
     {
       label: "Name",
@@ -66,10 +90,6 @@ const ItemsTable = () => {
       dataIndex: "name",
     },
     {
-      title: "Quantity",
-      dataIndex: "quantity",
-    },
-    {
       title: "Parts",
       render: (record) => 
       <>
@@ -77,7 +97,14 @@ const ItemsTable = () => {
           <EyeOutlined />
         </Button>
       </>
-    }
+    },
+    {
+      title: '',
+      width: '3rem',
+      render: (record) => (
+        <DeleteOutlined onClick={() => handleOpenDeleteModal(record)}/>
+      )
+    },
   ];
 
   const partsColumns = [
@@ -96,7 +123,7 @@ const ItemsTable = () => {
   ];
 
   return (
-    <div className={itemsTableContainer}>
+    <div className={itemsTableContainerWithFilter}>
       <div>
         <Search
           searchRef={searchRef}
@@ -116,6 +143,9 @@ const ItemsTable = () => {
         <div onClick={resetFilters}>
           <UndoOutlined />
         </div>
+        <Button onClick={() => setAddItemModalShow(true)}>
+          <b>add</b>
+        </Button>
       </div>
 
       <Table
@@ -139,6 +169,25 @@ const ItemsTable = () => {
             className="parts_tableContainer modalTableContainer"
           ></Table>
         </Modal>
+      }
+      {
+        addItemModalShow &&
+          <AddItemModal 
+            set={setAddItemModalShow}
+            state={addItemModalShow}
+            handleGetItems={handleGetItems}
+          />
+      }
+      {
+        deleteModalShow && 
+        <DeleteModal
+          set={setDeleteModalShow}
+          state={deleteModalShow}
+          title={deleteModalData.title}
+          reqParam={deleteModalData.reqParam}
+          endPoint={deleteModalData.endPoint}
+          getRefresh={handleGetItems}
+        />
       }
     </div>
   );

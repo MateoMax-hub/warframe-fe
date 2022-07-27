@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import style from "./header.module.scss";
 import { Modal } from 'antd';
+import SellTrashModal from "../modals/SellTrashModal";
 
 const Header = () => {
   let navigate = useNavigate();
   const { header, noteForm } = style;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [sellTrashModal, setSellTrashModal] = useState(false);
   const [confirmReload, setConfirmReload] = useState(false);
   const [formData, setFormData] = useState(localStorage.getItem('note') || '');
 
@@ -41,7 +43,8 @@ const Header = () => {
           <i>items</i>
         </button>
       </div>
-      <button onClick={() => handleModal(setIsModalVisible, isModalVisible)}><i>Fast note</i></button>
+      <button style={{right: '90vw'}} onClick={() => handleModal(setSellTrashModal, sellTrashModal)}><i>Sell trash</i></button>
+      <button style={{left: '90vw'}} onClick={() => handleModal(setIsModalVisible, isModalVisible)}><i>Fast note</i></button>
 
 
       <Modal title="Fast note" visible={isModalVisible} footer={false} onCancel={() => handleModal(setIsModalVisible, isModalVisible)}>
@@ -63,6 +66,11 @@ const Header = () => {
           </div>
         </div>
       </Modal>
+      {
+        sellTrashModal &&
+          <SellTrashModal 
+          />
+      }
     </div>
   );
 };

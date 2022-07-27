@@ -2,18 +2,29 @@ import React, { useEffect, useState, useRef } from "react";
 import Search from "../utils/Search";
 import Select from "../utils/Select";
 import style from "./items.module.scss";
-import { UndoOutlined, EyeOutlined } from "@ant-design/icons";
+import { UndoOutlined, EyeOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Button, Modal, Table } from "antd";
 import { useItems } from "../../hooks/useItems";
+import AddItemInvModal from "../modals/AddItemInvModal";
+import DeleteModal from "../utils/DeleteModal";
 
 const ItemsInvTable = () => {
-  const { itemsTableContainer, viewPartsButton } = style;
+  const { itemsTableContainerWithFilter, viewPartsButton } = style;
   const searchRef = useRef(null);
-  const { itemsInvData } = useItems();
+  const { getItemsInv } = useItems();
+  const [itemsInvData, setItemsInvData] = useState([]);
   const [searchFilter, setSearchFilter] = useState({});
   const [filterType, setFilterType] = useState({});
   const [itemsData, setItemsData] = useState([]);
   const [partsModal, setPartsModal] = useState({status: false, parts: []});
+  const [addItemInvModalShow, setAddItemInvModalShow] = useState(false);
+  const [deleteModalData, setDeleteModalData] = useState({});
+  const [deleteModalShow, setDeleteModalShow] = useState(false);
+
+  useEffect(() => {
+    handleGetItemsInv();
+  }, []);
+  
 
   useEffect(() => {
     if (searchFilter.mySearch && filterType.myFilter) {
@@ -27,7 +38,7 @@ const ItemsInvTable = () => {
   }, [searchFilter, filterType]);
 
   useEffect(() => {
-    if (itemsInvData.length !== 0) setItemsData(itemsInvData);
+    setItemsData(itemsInvData);
   }, [itemsInvData]);
 
   const resetFilters = () => {
@@ -39,6 +50,19 @@ const ItemsInvTable = () => {
 
   const handlePartsModalShow = (record) => {
     setPartsModal({status: !partsModal.status, parts: partsModal.status ? [] : record.parts})
+  };
+
+  const handleGetItemsInv = async () => {
+    setItemsInvData(await getItemsInv());
+  };
+
+  const handleOpenDeleteModal = (record) => {
+    setDeleteModalShow(true);
+    setDeleteModalData({
+      title: 'Are you sure you want to delete this item?', 
+      reqParam: record._id, 
+      endPoint: 'itemsInv'
+    });
   };
 
   const options = [
@@ -77,7 +101,14 @@ const ItemsInvTable = () => {
           <EyeOutlined />
         </Button>
       </>
-    }
+    },
+    {
+      title: '',
+      width: '3rem',
+      render: (record) => (
+        <DeleteOutlined onClick={() => handleOpenDeleteModal(record)}/>
+      )
+    },
   ];
 
   const partsColumns = [
@@ -96,7 +127,7 @@ const ItemsInvTable = () => {
   ];
 
   return (
-    <div className={itemsTableContainer}>
+    <div className={itemsTableContainerWithFilter}>
       <div>
         <Search
           searchRef={searchRef}
@@ -116,6 +147,9 @@ const ItemsInvTable = () => {
         <div onClick={resetFilters}>
           <UndoOutlined />
         </div>
+        <Button onClick={() => setAddItemInvModalShow(true)}>
+          <b>add</b>
+        </Button>
       </div>
 
       <Table
@@ -139,6 +173,25 @@ const ItemsInvTable = () => {
             className="parts_tableContainer modalTableContainer"
           ></Table>
         </Modal>
+      }
+      {
+        addItemInvModalShow && 
+          <AddItemInvModal 
+            state={addItemInvModalShow}
+            set={setAddItemInvModalShow}
+            refresh={handleGetItemsInv}
+          />
+      }
+      {
+        deleteModalShow && 
+        <DeleteModal
+          set={setDeleteModalShow}
+          state={deleteModalShow}
+          title={deleteModalData.title}
+          reqParam={deleteModalData.reqParam}
+          endPoint={deleteModalData.endPoint}
+          getRefresh={handleGetItemsInv}
+        />
       }
     </div>
   );

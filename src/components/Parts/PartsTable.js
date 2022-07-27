@@ -1,18 +1,26 @@
 import React, { useEffect, useState, useRef } from 'react';
 import style from './parts.module.scss';
 import { useParts } from '../../hooks/useParts';
-import { Table } from 'antd';
+import { Table, Button } from 'antd';
 import Search from '../utils/Search';
 import Select from '../utils/Select';
-import { UndoOutlined } from '@ant-design/icons';
+import { UndoOutlined, DeleteOutlined } from '@ant-design/icons';
+import { useImg } from "../../hooks/useImg";
+import AddPartModal from '../modals/AddPartModal';
+import DeleteModal from '../utils/DeleteModal';
 
 const PartsTable = () => {
-  const { partsTableContainer } = style;
+  const { partsTableContainerWithFilter } = style;
   const [searchFilter, setSearchFilter] = useState({});
   const [filterType, setFilterType] = useState({});
   const [parts, setParts] = useState([]);
-  const { partsData } = useParts();
+  const [addPartModalShow, setAddPartModalShow] = useState(false);
+  const [partsData, setPartsData] = useState([]);
+  const [deleteModalData, setDeleteModalData] = useState({});
+  const [deleteModalShow, setDeleteModalShow] = useState(false);
+  const { getParts } = useParts();
   const searchRef = useRef(null);
+  const { images } = useImg();
 
   useEffect(() => {
     if (searchFilter.mySearch && filterType.myFilter) {
@@ -26,8 +34,26 @@ const PartsTable = () => {
   }, [searchFilter, filterType]);
 
   useEffect(() => {
-    if (partsData.length !== 0) setParts(partsData);
+    console.log(partsData);
+    if (partsData?.length !== 0) setParts(partsData);
   }, [partsData]);
+
+  useEffect(() => {
+    handleGetParts();
+  }, []);
+
+  const handleGetParts = async () => {
+    setPartsData(await getParts());
+  };
+
+  const handleOpenDeleteModal = (record) => {
+    setDeleteModalShow(true);
+    setDeleteModalData({
+      title: 'Are you sure you want to delete this part?', 
+      reqParam: record._id, 
+      endPoint: 'parts'
+    });
+  };
 
   const columns = [
     {
@@ -41,7 +67,23 @@ const PartsTable = () => {
     {
       title: 'Ducats',
       dataIndex: 'ducats'
-    }
+    },
+    {
+      title: '',
+      width: '10rem',
+      render: (record) => {
+        const imgFound = images?.find((img) => img?.name === record?.partType);
+        return (
+        <img style={{maxHeight: '3rem'}} src={imgFound?.html} alt='' />
+      )}
+    },
+    {
+      title: '',
+      width: '3rem',
+      render: (record) => (
+        <DeleteOutlined onClick={() => handleOpenDeleteModal(record)}/>
+      )
+    },
   ];
 
   const options = [
@@ -67,7 +109,7 @@ const PartsTable = () => {
   };
 
   return (
-    <div className={partsTableContainer}>
+    <div className={partsTableContainerWithFilter}>
       <div>
         <Search searchRef={searchRef} placeHolder="buscar" width="10rem" setState={setSearchFilter} statePropName="mySearch"/>
         <Select 
@@ -81,6 +123,9 @@ const PartsTable = () => {
         <div onClick={resetFilters}>
           <UndoOutlined />
         </div>
+        <Button onClick={() => setAddPartModalShow(true)}>
+          <b>add</b>
+        </Button>
       </div>
 
       <Table
@@ -92,6 +137,26 @@ const PartsTable = () => {
         className='parts_tableContainer'
       >
       </Table>
+
+      {
+        addPartModalShow &&
+          <AddPartModal 
+            set={setAddPartModalShow}
+            state={addPartModalShow}
+            handleGetParts={handleGetParts}
+          />
+      }
+      {
+        deleteModalShow && 
+        <DeleteModal
+          set={setDeleteModalShow}
+          state={deleteModalShow}
+          title={deleteModalData.title}
+          reqParam={deleteModalData.reqParam}
+          endPoint={deleteModalData.endPoint}
+          getRefresh={handleGetParts}
+        />
+      }
     </div>
   );
 };

@@ -13,7 +13,7 @@
             margin: 0 1rem;
         }
 
-        & > div:last-child {
+        & > div:nth-child(2) {
             background-color: rgba(255, 255, 202, 0.644);
             border: 2px rgba(255, 255, 0, 0.575) solid;
             color: #3b3b3b;
@@ -37,6 +37,92 @@
             & > span {
                 font-size: 19px;
                 transform: rotateZ(45deg);
+            }
+        }
+        & > button:last-child {
+            width: 4rem;
+            background-color: rgba(255, 255, 202, 0.644);
+            border: 2px rgba(255, 255, 0, 0.575) solid;
+            color: #3b3b3b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: .05s;
+
+            &:hover {
+                background-color: rgba(255, 255, 133, 0.753);
+                border: 2px #ffff7d solid;
+                transition: .05s;
+            }
+            &:active {
+                transform: scale(.8);
+                transition: .05s;
+            }
+        }
+    }
+}
+.tableContainerWithFilter {
+    width: 100%;
+    min-height: calc(100vh - 6rem - 42px);
+    background-color: #b8b86d94;
+
+    & > div:first-child {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 1rem 0;
+
+        & > div:nth-child(2) {
+            margin: 0 1rem;
+        }
+
+        & > div:nth-child(3) {
+            background-color: rgba(255, 255, 202, 0.644);
+            border: 2px rgba(255, 255, 0, 0.575) solid;
+            color: #3b3b3b;
+            width: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: .05s;
+
+            &:hover {
+                background-color: rgba(255, 255, 133, 0.753);
+                border: 2px #ffff7d solid;
+                transition: .05s;
+            }
+            &:active {
+                transform: scale(.8);
+                transition: .05s;
+            }
+            
+            & > span {
+                font-size: 19px;
+                transform: rotateZ(45deg);
+            }
+        }
+        & > button:last-child {
+            width: 4rem;
+            background-color: rgba(255, 255, 202, 0.644);
+            border: 2px rgba(255, 255, 0, 0.575) solid;
+            color: #3b3b3b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: .05s;
+            margin-left: 1rem;
+
+            &:hover {
+                background-color: rgba(255, 255, 133, 0.753);
+                border: 2px #ffff7d solid;
+                transition: .05s;
+            }
+            &:active {
+                transform: scale(.8);
+                transition: .05s;
             }
         }
     }

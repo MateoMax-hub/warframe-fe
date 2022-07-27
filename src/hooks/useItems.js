@@ -32,6 +32,7 @@ const useItems = () => {
         return item;
       });
       setItemsInvData(dataWrapped);
+      return dataWrapped;
     } catch (error) {
       console.log(error);
     }
@@ -57,6 +58,7 @@ const useItems = () => {
         return item;
       });
       setItemsData(dataWrapped);
+      return dataWrapped;
     } catch (error) {
       console.log(error);
     }
@@ -70,6 +72,31 @@ const useItems = () => {
         return item;
       });
       setItemsTypesData(dataWrapped);
+      return dataWrapped;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const postItemsTypes = async (itemType) => {
+    try {
+      await axios.post('http://localhost:4000/api/itemsTypes', itemType)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const postItem = async (item) => {
+    try {
+      await axios.post('http://localhost:4000/api/items', item)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const postItemInv = async (item) => {
+    try {
+      await axios.post('http://localhost:4000/api/itemsInv', item)
     } catch (error) {
       console.log(error);
     }
@@ -81,7 +108,10 @@ const useItems = () => {
     itemsData,
     getItems,
     itemsTypesData,
-    getItemsTypes
+    getItemsTypes,
+    postItemsTypes,
+    postItem,
+    postItemInv
   };
 };
 

@@ -143,3 +143,14 @@
         color: transparent;
     }
 }
+
+
+.deleteModalFooter {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+
+    & > :first-child {
+        margin-right: 1rem;
+    }
+}

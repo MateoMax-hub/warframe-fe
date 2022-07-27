@@ -14,7 +14,7 @@ const useParts = () => {
 
   const getParts = async () => {
     try {
-      const { data } = await axios.get("http://localhost:4000/api/parts");
+      const { data } = await axios.get('http://localhost:4000/api/parts');
       const dataWrapped = data.data.map((part) => {
         part.partType = part.type?.partType;
         delete part.type;
@@ -22,6 +22,7 @@ const useParts = () => {
         return part;
       })
       setPartsData(dataWrapped);
+      return dataWrapped;
     } catch (error) {
       console.log(error);
     }
@@ -29,8 +30,9 @@ const useParts = () => {
 
   const getPartsTypes = async () => {
     try {
-      const { data } = await axios.get("http://localhost:4000/api/partsTypes");
+      const { data } = await axios.get('http://localhost:4000/api/partsTypes');
       setPartsTypesData(data.data);
+      return data.data;
     } catch (error) {
       console.log(error);
     }
@@ -38,7 +40,7 @@ const useParts = () => {
 
   const getPartsInv = async () => {
     try {
-      const { data } = await axios.get("http://localhost:4000/api/partsInv");
+      const { data } = await axios.get('http://localhost:4000/api/partsInv');
       const dataWrapped = data.data.map((part) => {
         part.partType = part.part?.type?.partType;
         delete part.part?.type;
@@ -50,6 +52,31 @@ const useParts = () => {
         return part;
       })
       setpartsInvData(dataWrapped);
+      return dataWrapped;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const postPartTypes = async (partType) => {
+    try {
+      await axios.post('http://localhost:4000/api/partsTypes', partType)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const postPart = async (part) => {
+    try {
+      await axios.post('http://localhost:4000/api/parts', part)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const postPartInv = async (part) => {
+    try {
+      await axios.post('http://localhost:4000/api/partsInv', part)
     } catch (error) {
       console.log(error);
     }
@@ -62,6 +89,9 @@ const useParts = () => {
     getPartsTypes,
     partsInvData,
     getPartsInv,
+    postPartTypes,
+    postPart,
+    postPartInv
   });
 };
 

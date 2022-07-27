@@ -4,16 +4,22 @@ import Select from "../utils/Select";
 import style from './parts.module.scss';
 import { UndoOutlined } from '@ant-design/icons';
 import { useParts } from '../../hooks/useParts';
-import { Table } from 'antd';
+import { Button, Table } from 'antd';
+import AddPartInvModal from '../modals/AddPartInvModal';
 
 const PartsInvTable = () => {
-  const { partsTableContainer } = style;
+  const { partsTableContainerWithFilter } = style;
   const searchRef = useRef(null);
-  const { partsInvData } = useParts();
+  const { getPartsInv } = useParts();
+  const [partsInvData, setPartsInvData] = useState([]);
   const [searchFilter, setSearchFilter] = useState({});
   const [filterType, setFilterType] = useState({});
   const [parts, setParts] = useState([]);
+  const [addPartShow, setAddPartShow] = useState(false);
 
+  useEffect(() => {
+    handleGetPartsInv();
+  }, []);
 
   useEffect(() => {
     if (searchFilter.mySearch && filterType.myFilter) {
@@ -28,7 +34,6 @@ const PartsInvTable = () => {
 
   useEffect(() => {
     if (partsInvData.length !== 0) setParts(partsInvData);
-    console.log(partsInvData);
   }, [partsInvData]);
 
   const resetFilters = () => {
@@ -36,6 +41,10 @@ const PartsInvTable = () => {
     setSearchFilter({});
     setParts(partsInvData);
     searchRef.current.value = ''
+  };
+
+  const handleGetPartsInv = async () => {
+    setPartsInvData(await getPartsInv())
   };
 
   const options = [
@@ -77,7 +86,7 @@ const PartsInvTable = () => {
   ];
 
   return (
-    <div className={partsTableContainer}>
+    <div className={partsTableContainerWithFilter}>
       <div>
         <Search
           searchRef={searchRef}
@@ -97,6 +106,9 @@ const PartsInvTable = () => {
         <div onClick={resetFilters}>
           <UndoOutlined />
         </div>
+        <Button onClick={() => setAddPartShow(true)}>
+          <b>add</b>
+        </Button>
       </div>
 
       <Table
@@ -107,6 +119,11 @@ const PartsInvTable = () => {
         scroll={{ y: "calc(100vh - 6rem - 170px)" }}
         className="parts_tableContainer"
       ></Table>
+
+      {
+        addPartShow &&
+          <AddPartInvModal set={setAddPartShow} state={addPartShow} refresh={handleGetPartsInv}/>
+      }
     </div>
   );
 };
