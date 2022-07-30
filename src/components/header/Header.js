@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import style from "./header.module.scss";
 import { Modal } from 'antd';
-import SellTrashModal from "../modals/SellTrashModal";
+import SellTrashModal from "./../modals/SellTrashModal";
 
 const Header = () => {
   let navigate = useNavigate();
@@ -69,6 +69,8 @@ const Header = () => {
       {
         sellTrashModal &&
           <SellTrashModal 
+            set={setSellTrashModal}
+            state={sellTrashModal}
           />
       }
     </div>

@@ -58,6 +58,22 @@ const useParts = () => {
     }
   };
 
+  const getTrashPrime = async () => {
+    try {
+      const { data } = await axios.get('http://localhost:4000/api/partsInv/trash')
+      const dataWrapped = data.data.map((part) => ({
+        partType: part.part.type.partType,
+        name: part.part.name,
+        ducats: part.part.ducats,
+        quantity: part.quantity,
+        part: part._id,
+      }));
+      return dataWrapped;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const postPartTypes = async (partType) => {
     try {
       await axios.post('http://localhost:4000/api/partsTypes', partType)
@@ -91,7 +107,8 @@ const useParts = () => {
     getPartsInv,
     postPartTypes,
     postPart,
-    postPartInv
+    postPartInv,
+    getTrashPrime
   });
 };
 
