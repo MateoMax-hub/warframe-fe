@@ -72,11 +72,8 @@ const AddPartModal = ({ set, state, handleGetParts }) => {
         >
           <Select
             showSearch
-            filterOption={(input, option) => 
-              option.children[0].toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-            filterSort={(optionA, optionB) =>
-              optionA.children[0].toLowerCase().localeCompare(optionB.children[0].toLowerCase())
+            filterOption={(input, option) =>
+              option?.children?.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
           >
             {partsTypes.length !== 0 &&

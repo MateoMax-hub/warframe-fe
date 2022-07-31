@@ -20,7 +20,7 @@ const PartsTable = () => {
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const { getParts } = useParts();
   const searchRef = useRef(null);
-  const { images } = useImg();
+  // const { images } = useImg();
 
   useEffect(() => {
     if (searchFilter.mySearch && filterType.myFilter) {
@@ -34,7 +34,6 @@ const PartsTable = () => {
   }, [searchFilter, filterType]);
 
   useEffect(() => {
-    console.log(partsData);
     if (partsData?.length !== 0) setParts(partsData);
   }, [partsData]);
 
@@ -68,15 +67,15 @@ const PartsTable = () => {
       title: 'Ducats',
       dataIndex: 'ducats'
     },
-    {
-      title: '',
-      width: '10rem',
-      render: (record) => {
-        const imgFound = images?.find((img) => img?.name === record?.partType);
-        return (
-        <img style={{maxHeight: '3rem'}} src={imgFound?.html} alt='' />
-      )}
-    },
+    // {
+    //   title: '',
+    //   width: '10rem',
+    //   render: (record) => {
+    //     const imgFound = images?.find((img) => img?.name === record?.partType);
+    //     return (
+    //     <img style={{maxHeight: '3rem'}} src={imgFound?.html} alt='' />
+    //   )}
+    // },
     {
       title: '',
       width: '3rem',

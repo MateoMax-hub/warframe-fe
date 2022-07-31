@@ -2,10 +2,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import Search from "../utils/Search";
 import Select from "../utils/Select";
 import style from './parts.module.scss';
-import { UndoOutlined } from '@ant-design/icons';
+import { UndoOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useParts } from '../../hooks/useParts';
 import { Button, Table } from 'antd';
 import AddPartInvModal from '../modals/AddPartInvModal';
+import DeleteModal from '../utils/DeleteModal';
 
 const PartsInvTable = () => {
   const { partsTableContainerWithFilter } = style;
@@ -16,6 +17,8 @@ const PartsInvTable = () => {
   const [filterType, setFilterType] = useState({});
   const [parts, setParts] = useState([]);
   const [addPartShow, setAddPartShow] = useState(false);
+  const [deleteModalData, setDeleteModalData] = useState({});
+  const [deleteModalShow, setDeleteModalShow] = useState(false);
 
   useEffect(() => {
     handleGetPartsInv();
@@ -45,6 +48,15 @@ const PartsInvTable = () => {
 
   const handleGetPartsInv = async () => {
     setPartsInvData(await getPartsInv())
+  };
+
+  const handleOpenDeleteModal = (record) => {
+    setDeleteModalShow(true);
+    setDeleteModalData({
+      title: 'Are you sure you want to delete this part?', 
+      reqParam: record._id, 
+      endPoint: 'partsInv/all'
+    });
   };
 
   const options = [
@@ -82,6 +94,13 @@ const PartsInvTable = () => {
     {
       title: 'Quantity',
       dataIndex: 'quantity'
+    },
+    {
+      title: '',
+      width: '3rem',
+      render: (record) => (
+        <DeleteOutlined onClick={() => handleOpenDeleteModal(record)}/>
+      )
     },
   ];
 
@@ -123,6 +142,17 @@ const PartsInvTable = () => {
       {
         addPartShow &&
           <AddPartInvModal set={setAddPartShow} state={addPartShow} refresh={handleGetPartsInv}/>
+      }
+      {
+        deleteModalShow && 
+        <DeleteModal
+          set={setDeleteModalShow}
+          state={deleteModalShow}
+          title={deleteModalData.title}
+          reqParam={deleteModalData.reqParam}
+          endPoint={deleteModalData.endPoint}
+          getRefresh={handleGetPartsInv}
+        />
       }
     </div>
   );
