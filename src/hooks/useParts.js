@@ -98,6 +98,10 @@ const useParts = () => {
     }
   };
 
+  const Sell = async (part) => {
+
+  }
+
   return ({
     partsData,
     getParts,
