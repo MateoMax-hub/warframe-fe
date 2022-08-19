@@ -98,8 +98,14 @@ const useParts = () => {
     }
   };
 
-  const Sell = async (part) => {
-
+  const sellParts = async (parts) => {
+    try {
+      for (const part of parts) {
+        await axios.delete(`http://localhost:4000/api/partsInv/${part.part}?quantity=1`)
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return ({
@@ -112,7 +118,8 @@ const useParts = () => {
     postPartTypes,
     postPart,
     postPartInv,
-    getTrashPrime
+    getTrashPrime,
+    sellParts
   });
 };
 

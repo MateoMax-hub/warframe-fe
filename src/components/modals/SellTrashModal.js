@@ -13,27 +13,34 @@ import {
 
 const SellTrashModal = ({ set }) => {
   const { trashModal, trashContainer, cardDisabled, noDisplayCheck } = style;
-  const { getTrashPrime } = useParts();
+  const { getTrashPrime, sellParts } = useParts();
   const { getImgs } = useImg();
   const [trashPrimeData, setTrashPrimeData] = useState([]);
   const [cart, setCart] = useState([]);
   const [imgs, setImgs] = useState([]);
 
-  useEffect(async () => {
-    setTrashPrimeData(await getTrashPrime());
-    setImgs(await getImgs());
+  useEffect(() => {
+    getDataForModal()
   }, []);
 
-  const handleSale = () => {
-    
+  const handleSale = async () => {
+    await sellParts(cart)
+    getDataForModal()
+    setCart([]);
   };
 
-  const cardBuilder = ({part, inv}) => {
+  const getDataForModal = async () => {
+    setTrashPrimeData(await getTrashPrime());
+    setImgs(await getImgs());
+  }
+
+  const cardBuilder = ({part, inv}, i) => {
     const handleAddToCart = () => {
-      setCart([...cart, part]);
+      setCart([...cart, {...part, key: i}]);
     }
     const handleDeleteFromCart = () => {
-      const newCart = cart.filter((partInCart) => partInCart.part !== part.part);
+      const newCart = cart.filter((partInCart) => partInCart.part !== part.part 
+      || (partInCart.part === part.part && partInCart.key !== i));
       setCart(newCart);
     }
     const setOnClick = () => {
@@ -44,8 +51,8 @@ const SellTrashModal = ({ set }) => {
       return handleDeleteFromCart;
     }
     const getDisable = () => {
-      const partFoundInCart = cart.find((partInCart) => partInCart.part === part.part);
-      if (inv)  return partFoundInCart ? cardDisabled : noDisplayCheck;
+      const partFoundInCart = cart.find((partInCart) => partInCart.part === part.part && partInCart.key === i);
+      if (inv) return partFoundInCart ? cardDisabled : noDisplayCheck;
     };
     const imgFound = imgs.find((img) => img.name === part.partType);
     return (
@@ -90,13 +97,13 @@ const SellTrashModal = ({ set }) => {
         <div>
           {
             trashPrimeData.length !== 0 &&
-            trashPrimeData?.map((part) => cardBuilder({part, inv: true}))
+            trashPrimeData?.map((part, i) => cardBuilder({part, inv: true}, i))
           }
         </div>
         <div>
           {
             cart.length !== 0 &&
-            cart?.map((part) => cardBuilder({part, inv: false}))
+            cart?.map((part) => cardBuilder({part, inv: false}, part.key))
           }
         </div>
       </div>
