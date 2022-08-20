@@ -23,7 +23,7 @@ const PartsInvTable = () => {
 
   useEffect(() => {
     handleGetPartsInv();
-  }, []);
+  }, []); // eslint-disable-line
 
   useEffect(() => {
     if (searchFilter.mySearch && filterType.myFilter) {
@@ -34,7 +34,7 @@ const PartsInvTable = () => {
       });
       setParts(partsFiltered?.filter(obj => obj));
     }
-  }, [searchFilter, filterType]);
+  }, [searchFilter, filterType]); // eslint-disable-line
 
   useEffect(() => {
     if (partsInvData.length !== 0) setParts(partsInvData);

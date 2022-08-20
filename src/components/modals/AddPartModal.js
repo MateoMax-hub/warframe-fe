@@ -10,7 +10,7 @@ const AddPartModal = ({ set, state, handleGetParts }) => {
 
   useEffect(() => {
     handleGetPartsTypes();
-  }, []);
+  }, []); // eslint-disable-line
 
   const handleGetPartsTypes = async () => {
     setPartsTypes(await getPartsTypes());

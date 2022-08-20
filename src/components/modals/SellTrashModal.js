@@ -1,8 +1,7 @@
-import { Modal, Form, Input, Button, Table } from "antd";
+import { Modal } from "antd";
 import React, { useEffect, useState } from "react";
 import { useImg } from "../../hooks/useImg";
 import { useParts } from "../../hooks/useParts";
-import { messageError } from "../utils/messages";
 import style from "./modals.module.scss";
 import {
   DoubleRightOutlined,
@@ -21,7 +20,7 @@ const SellTrashModal = ({ set }) => {
 
   useEffect(() => {
     getDataForModal()
-  }, []);
+  }, []); // eslint-disable-line
 
   const handleSale = async () => {
     await sellParts(cart)

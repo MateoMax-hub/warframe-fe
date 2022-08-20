@@ -5,7 +5,6 @@ import { Table, Button } from 'antd';
 import Search from '../utils/Search';
 import Select from '../utils/Select';
 import { UndoOutlined, DeleteOutlined } from '@ant-design/icons';
-import { useImg } from "../../hooks/useImg";
 import AddPartModal from '../modals/AddPartModal';
 import DeleteModal from '../utils/DeleteModal';
 
@@ -31,7 +30,7 @@ const PartsTable = () => {
       });
       setParts(partsFiltered?.filter(obj => obj));
     }
-  }, [searchFilter, filterType]);
+  }, [searchFilter, filterType]); // eslint-disable-line
 
   useEffect(() => {
     if (partsData?.length !== 0) setParts(partsData);
@@ -39,7 +38,7 @@ const PartsTable = () => {
 
   useEffect(() => {
     handleGetParts();
-  }, []);
+  }, []); // eslint-disable-line
 
   const handleGetParts = async () => {
     setPartsData(await getParts());
