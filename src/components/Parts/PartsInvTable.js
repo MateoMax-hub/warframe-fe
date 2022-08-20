@@ -2,16 +2,16 @@ import React, { useEffect, useState, useRef } from 'react';
 import Search from "../utils/Search";
 import Select from "../utils/Select";
 import style from './parts.module.scss';
-import { UndoOutlined, DeleteOutlined } from '@ant-design/icons';
+import { UndoOutlined, DeleteOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { useParts } from '../../hooks/useParts';
 import { Button, Table } from 'antd';
 import AddPartInvModal from '../modals/AddPartInvModal';
 import DeleteModal from '../utils/DeleteModal';
 
 const PartsInvTable = () => {
-  const { partsTableContainerWithFilter } = style;
+  const { partsTableContainerWithFilter, handleQuantityBtn, quantityBtnContainer } = style;
   const searchRef = useRef(null);
-  const { getPartsInv } = useParts();
+  const { getPartsInv, postPartInv, sellPart } = useParts();
   const [partsInvData, setPartsInvData] = useState([]);
   const [searchFilter, setSearchFilter] = useState({});
   const [filterType, setFilterType] = useState({});
@@ -19,6 +19,7 @@ const PartsInvTable = () => {
   const [addPartShow, setAddPartShow] = useState(false);
   const [deleteModalData, setDeleteModalData] = useState({});
   const [deleteModalShow, setDeleteModalShow] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     handleGetPartsInv();
@@ -59,6 +60,21 @@ const PartsInvTable = () => {
     });
   };
 
+  const handleQuantityChange = async (record, isAdd) => {
+    try {
+      setLoading(true);
+      if (isAdd) {
+        await postPartInv({part: record.partId, quantity: 1});
+      } else {
+        await sellPart(record._id);
+      }
+      await handleGetPartsInv();
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const options = [
     {
       label: "Name",
@@ -93,7 +109,19 @@ const PartsInvTable = () => {
     },
     {
       title: 'Quantity',
-      dataIndex: 'quantity'
+      render: (record) => {
+        return (
+          <div className={quantityBtnContainer}>
+            <Button disabled={loading} className={handleQuantityBtn} onClick={() => handleQuantityChange(record, false)}>
+              <MinusOutlined />
+            </Button>
+            {record.quantity}
+            <Button disabled={loading} className={handleQuantityBtn} onClick={() => handleQuantityChange(record, true)}>
+              <PlusOutlined />
+            </Button>
+          </div>
+        );
+      }
     },
     {
       title: '',

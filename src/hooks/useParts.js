@@ -47,6 +47,7 @@ const useParts = () => {
         part.ducats = part.part?.ducats.toString();
         part.name = part.part?.name;
         part.quantity = part.quantity.toString();
+        part.partId = part?.part?._id;
         delete part.__v;
         delete part.part;
         return part;
@@ -108,6 +109,14 @@ const useParts = () => {
     }
   }
 
+  const sellPart = async (id) => {
+    try {
+      await axios.delete(`http://localhost:4000/api/partsInv/${id}?quantity=1`)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return ({
     partsData,
     getParts,
@@ -119,7 +128,8 @@ const useParts = () => {
     postPart,
     postPartInv,
     getTrashPrime,
-    sellParts
+    sellParts,
+    sellPart
   });
 };
 
