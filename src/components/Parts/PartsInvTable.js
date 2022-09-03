@@ -4,7 +4,7 @@ import Select from "../utils/Select";
 import style from './parts.module.scss';
 import { UndoOutlined, DeleteOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { useParts } from '../../hooks/useParts';
-import { Button, Table } from 'antd';
+import { Button, Checkbox, Table } from 'antd';
 import AddPartInvModal from '../modals/AddPartInvModal';
 import DeleteModal from '../utils/DeleteModal';
 
@@ -121,6 +121,12 @@ const PartsInvTable = () => {
             </Button>
           </div>
         );
+      }
+    },
+    {
+      title: 'is junk?',
+      render: (record) => {
+        <Checkbox defaultChecked={record.isJunk} />
       }
     },
     {
